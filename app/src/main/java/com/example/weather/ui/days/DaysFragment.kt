@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.weather.MainViewModel
 import com.example.weather.databinding.FragmentDaysBinding
-import com.example.weather.di.adapters.WeatherAdapter
-import com.example.weather.di.model.WeatherModel
+import com.example.weather.adapters.WeatherAdapter
+import com.example.weather.model.WeatherModel
 
 
 class DaysFragment : Fragment() , WeatherAdapter.Listener{

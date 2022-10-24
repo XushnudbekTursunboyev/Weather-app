@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,6 +20,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -25,9 +28,9 @@ import com.bumptech.glide.Glide
 import com.example.weather.DialogManager
 import com.example.weather.MainViewModel
 import com.example.weather.R
+import com.example.weather.adapters.ViewPagerAdapter
 import com.example.weather.databinding.FragmentMainBinding
-import com.example.weather.di.adapters.ViewPagerAdapter
-import com.example.weather.di.model.WeatherModel
+import com.example.weather.model.WeatherModel
 import com.example.weather.ui.days.DaysFragment
 import com.example.weather.ui.hours.HoursFragment
 import com.example.weather.utils.extensions.isPermissionGranted
@@ -38,9 +41,10 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.material.tabs.TabLayoutMediator
 import org.json.JSONObject
 
+
 const val API_KEY = "cac864b716ec4702a1f174256220107"
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), OnRefreshListener {
 
     private lateinit var fLocationClient: FusedLocationProviderClient
 
@@ -52,21 +56,29 @@ class MainFragment : Fragment() {
     private lateinit var _bn: FragmentMainBinding
     private val bn get() = _bn
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _bn = FragmentMainBinding.inflate(inflater, container, false)
-
+        bn.constraint.setOnRefreshListener(this)
         return bn.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        checkPermission()
-        init()
-        updateCurrentCard()
+        setUpUI()
+
     }
+
+
+    private fun setUpUI() {
+        checkPermission()
+        updateCurrentCard()
+        init()
+    }
+
 
     override fun onResume() {
         super.onResume()
@@ -81,12 +93,11 @@ class MainFragment : Fragment() {
             t.text = tList[p]
         }.attach()
         imSync.setOnClickListener {
-
             tabLayout.selectTab(tabLayout.getTabAt(0))
             checkLocation()
         }
         imSearch.setOnClickListener {
-            DialogManager.searchByNameDialog(requireContext(), object : DialogManager.Listener{
+            DialogManager.searchByNameDialog(requireContext(), object : DialogManager.Listener {
                 override fun onClick(name: String?) {
                     Log.d("MyLog", "Name: $name")
                     name?.let { requestWeatherData(it) }
@@ -96,10 +107,7 @@ class MainFragment : Fragment() {
     }
 
     private fun getLocation() {
-//        if (isLocationEnabled()) {
-//            Toast.makeText(requireActivity(), "Location Disabled!", Toast.LENGTH_SHORT).show()
-//            return
-//        }
+        if (!isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION)) checkPermission()
         val ct = CancellationTokenSource()
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -114,7 +122,6 @@ class MainFragment : Fragment() {
             .getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, ct.token)
             .addOnCompleteListener {
                 requestWeatherData("${it.result.latitude},${it.result.longitude}")
-
             }
 
     }
@@ -124,7 +131,7 @@ class MainFragment : Fragment() {
             getLocation()
         } else {
             DialogManager.locationSettingsDialog(requireContext(), object : DialogManager.Listener {
-                override fun onClick(name:String?) {
+                override fun onClick(name: String?) {
                     startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                 }
             })
@@ -145,13 +152,11 @@ class MainFragment : Fragment() {
             tvCondition.text = it.condition
             tvCurrentTemp.text = it.currentTemp.ifEmpty { maxMin }
             tvMaxMin.text = if (it.currentTemp.isEmpty()) "" else maxMin
-
             Glide.with(requireActivity())
                 .load("https:" + it.imageUrl)
                 .centerCrop()
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .into(imWeather)
-
         }
     }
 
@@ -172,14 +177,12 @@ class MainFragment : Fragment() {
         val queue = Volley.newRequestQueue(context)
         val request = StringRequest(
             Request.Method.GET,
-            url,
-            { result ->
+            url, { result ->
                 parseWeatherData(result)
             },
             { error ->
                 Log.d("MyLog", "Error: $error")
             }
-
         )
         queue.add(request)
     }
@@ -188,7 +191,6 @@ class MainFragment : Fragment() {
         val mainObject = JSONObject(result)
         val list = parseDays(mainObject)
         parseCurrentData(mainObject, list[0])
-
     }
 
     private fun parseDays(mainObject: JSONObject): List<WeatherModel> {
@@ -233,5 +235,11 @@ class MainFragment : Fragment() {
             permissionListener()
             pLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
+    }
+
+    override fun onRefresh() {
+        bn.tabLayout.selectTab(bn.tabLayout.getTabAt(0))
+        checkLocation()
+        bn.constraint.isRefreshing = false
     }
 }

@@ -67,4 +67,8 @@ dependencies {
 
     //location
     implementation 'com.google.android.gms:play-services-location:20.0.0'
+
+    //refresh layout
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
 }

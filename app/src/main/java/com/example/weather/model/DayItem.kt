@@ -1,4 +1,4 @@
-package com.example.weather.di.model
+package com.example.weather.model
 
 data class DayItem(
     val city:String,

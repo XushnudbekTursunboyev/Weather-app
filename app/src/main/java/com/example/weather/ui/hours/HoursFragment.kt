@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.weather.MainViewModel
 import com.example.weather.databinding.FragmentHoursBinding
-import com.example.weather.di.adapters.WeatherAdapter
-import com.example.weather.di.model.WeatherModel
+import com.example.weather.adapters.WeatherAdapter
+import com.example.weather.model.WeatherModel
 import com.google.gson.JsonArray
 import org.json.JSONArray
 import org.json.JSONObject
@@ -46,7 +46,7 @@ class HoursFragment : Fragment() {
 
     }
 
-    private fun getHoursList(wItem:WeatherModel):List<WeatherModel>{
+    private fun getHoursList(wItem: WeatherModel):List<WeatherModel>{
         val hoursArray = JSONArray(wItem.hours)
         val list = ArrayList<WeatherModel>()
         for (i in 0 until hoursArray.length()){

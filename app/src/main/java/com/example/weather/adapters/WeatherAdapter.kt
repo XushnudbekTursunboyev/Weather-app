@@ -1,4 +1,4 @@
-package com.example.weather.di.adapters
+package com.example.weather.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.weather.R
 import com.example.weather.databinding.ListItemBinding
-import com.example.weather.di.model.WeatherModel
+import com.example.weather.model.WeatherModel
 
 class WeatherAdapter(val listener: Listener?) : ListAdapter<WeatherModel, WeatherAdapter.Holder>(Comparator()) {
 
     class Holder(view: View, val listener: Listener?) : RecyclerView.ViewHolder(view) {
         val bn = ListItemBinding.bind(view)
-        var itemTemp:WeatherModel? =null
+        var itemTemp: WeatherModel? =null
         init {
                 itemView.setOnClickListener {
                     listener?.let {
@@ -60,6 +60,6 @@ class WeatherAdapter(val listener: Listener?) : ListAdapter<WeatherModel, Weathe
     }
 
     interface Listener{
-        fun onClick(item:WeatherModel)
+        fun onClick(item: WeatherModel)
     }
 }

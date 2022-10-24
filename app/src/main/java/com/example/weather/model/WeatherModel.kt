@@ -1,6 +1,6 @@
-package com.example.weather.di.model
+package com.example.weather.model
 
-data class WeatherModel(
+data class  WeatherModel(
     val city:String,
     val time:String,
     val condition:String,

@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/constraint"
     tools:context=".ui.main.MainFragment">
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         app:layout_constraintTop_toTopOf="@id/materialCardView"
         app:layout_constraintBottom_toBottomOf="@id/materialCardView"
         app:layout_constraintStart_toStartOf="parent"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_height="wrap_content"/>
 
@@ -28,11 +34,10 @@
         android:id="@+id/materialCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="@color/white"
-        android:backgroundTint="@color/card_blue_bg"
+        android:layout_margin="7dp"
+        android:backgroundTint="#03A9F4"
         android:elevation="0dp"
-        app:cardCornerRadius="5dp"
+        app:cardCornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -47,7 +52,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="07/02/2022 12:08"
+                android:text="..."
                 android:textSize="12sp"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +72,7 @@
                 android:id="@+id/tvCity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Madrid"
+                android:text="City name"
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -78,9 +83,9 @@
                 android:id="@+id/tvCurrentTemp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20 °C"
+                android:text="Current temp"
                 android:textColor="@color/white"
-                android:textSize="50sp"
+                android:textSize="48sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvCity" />
@@ -89,7 +94,7 @@
                 android:id="@+id/tvCondition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sunny"
+                android:text="Condition"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -100,7 +105,7 @@
                 android:id="@+id/tvMaxMin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="24C/23C"
+                android:text="Max/Min temp"
                 android:layout_marginBottom="10dp"
                 android:textColor="@color/white"
                 android:textSize="16sp"
@@ -138,6 +143,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp"
         android:layout_marginTop="5dp"
+        app:tabSelectedTextColor="@color/white"
         android:background="@color/white"
         android:backgroundTint="@color/card_blue_bg"
         app:layout_constraintEnd_toEndOf="@id/materialCardView"
@@ -166,4 +172,8 @@
         app:layout_constraintEnd_toEndOf="@id/materialCardView"
         app:layout_constraintStart_toStartOf="@id/materialCardView"
         app:layout_constraintTop_toBottomOf="@id/tabLayout" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
