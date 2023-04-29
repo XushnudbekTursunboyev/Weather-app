@@ -10,4 +10,14 @@
         android:name="com.example.weather.ui.main.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" />
+    <fragment
+        android:id="@+id/daysFragment"
+        android:name="com.example.weather.ui.days.DaysFragment"
+        android:label="fragment_days"
+        tools:layout="@layout/fragment_days" />
+    <fragment
+        android:id="@+id/hoursFragment2"
+        android:name="com.example.weather.ui.hours.HoursFragment"
+        android:label="fragment_hours"
+        tools:layout="@layout/fragment_hours" />
 </navigation>

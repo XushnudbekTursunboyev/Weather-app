@@ -6,20 +6,20 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.Settings
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.MenuItem.OnMenuItemClickListener
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
@@ -45,12 +45,12 @@ import org.json.JSONObject
 const val API_KEY = "cac864b716ec4702a1f174256220107"
 
 class MainFragment : Fragment(), OnRefreshListener {
-
     private lateinit var fLocationClient: FusedLocationProviderClient
 
     private val fList = listOf(HoursFragment(), DaysFragment())
     private val tList = listOf("Hours", "Days")
 
+    private val navController: NavController by lazy(LazyThreadSafetyMode.NONE) { NavHostFragment.findNavController(this) }
     private val model: MainViewModel by activityViewModels()
     private lateinit var pLauncher: ActivityResultLauncher<String>
     private lateinit var _bn: FragmentMainBinding
@@ -63,6 +63,26 @@ class MainFragment : Fragment(), OnRefreshListener {
     ): View {
         _bn = FragmentMainBinding.inflate(inflater, container, false)
         bn.constraint.setOnRefreshListener(this)
+        setHasOptionsMenu(true)
+        bn.toolbar.inflateMenu(R.menu.main_menu)
+        bn.toolbar.title =" Wheather App"
+        bn.toolbar.setOnMenuItemClickListener(object : OnMenuItemClickListener,
+            Toolbar.OnMenuItemClickListener {
+            override fun onMenuItemClick(p0: MenuItem?): Boolean {
+                when(p0?.itemId){
+                    R.id.daysFragment-> {
+                        navController.navigate(R.id.daysFragment)
+                    }
+                    R.id.hoursFragment2 ->{
+                        navController.navigate(R.id.hoursFragment2)
+                    }
+                }
+
+                return true
+            }
+
+        })
+
         return bn.root
     }
 
@@ -72,13 +92,12 @@ class MainFragment : Fragment(), OnRefreshListener {
 
     }
 
-
     private fun setUpUI() {
+        setHasOptionsMenu(true)
         checkPermission()
         updateCurrentCard()
         init()
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -242,4 +261,25 @@ class MainFragment : Fragment(), OnRefreshListener {
         checkLocation()
         bn.constraint.isRefreshing = false
     }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.main_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when(item.itemId){
+            R.id.daysFragment-> {
+                navController.navigate(R.id.daysFragment)
+            }
+            R.id.hoursFragment2 ->{
+                navController.navigate(R.id.hoursFragment2)
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
 }

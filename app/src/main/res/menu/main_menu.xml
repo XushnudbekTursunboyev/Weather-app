@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group>
+        <item
+            android:id="@+id/daysFragment"
+            android:icon="@drawable/ic_daily"
+            android:title="Daily" />
+        <item
+            android:id="@+id/hoursFragment2"
+            android:icon="@drawable/ic_hours"
+            android:title="Hours" />
+    </group>
+</menu>
