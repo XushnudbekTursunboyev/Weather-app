@@ -9,7 +9,14 @@
         android:id="@+id/mainFragment"
         android:name="com.example.weather.ui.main.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_daysFragment"
+            app:destination="@id/daysFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_hoursFragment2"
+            app:destination="@id/hoursFragment2" />
+    </fragment>
     <fragment
         android:id="@+id/daysFragment"
         android:name="com.example.weather.ui.days.DaysFragment"

@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'kotlin-kapt'
     id 'org.jetbrains.kotlin.android'
 }
 
@@ -70,5 +71,11 @@ dependencies {
 
     //refresh layout
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    //room
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
+    kapt "androidx.room:room-compiler:2.5.1"
+    implementation 'androidx.room:room-common:2.5.1'
+    implementation 'androidx.room:room-ktx:2.5.1'
 
 }

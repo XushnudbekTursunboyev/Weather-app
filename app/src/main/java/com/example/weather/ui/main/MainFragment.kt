@@ -1,10 +1,14 @@
 package com.example.weather.ui.main
 
 import android.Manifest
+import android.app.*
 import android.content.Context
+import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -15,6 +19,9 @@ import android.widget.Toolbar
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
@@ -31,6 +38,7 @@ import com.example.weather.R
 import com.example.weather.adapters.ViewPagerAdapter
 import com.example.weather.databinding.FragmentMainBinding
 import com.example.weather.model.WeatherModel
+import com.example.weather.ui.MainActivity
 import com.example.weather.ui.days.DaysFragment
 import com.example.weather.ui.hours.HoursFragment
 import com.example.weather.utils.extensions.isPermissionGranted
@@ -49,6 +57,10 @@ class MainFragment : Fragment(), OnRefreshListener {
 
     private val fList = listOf(HoursFragment(), DaysFragment())
     private val tList = listOf("Hours", "Days")
+
+    val CHANNEL_ID = "i.apps.notifications"
+    val CHANNEL_NAME = "channelName"
+    val NOTIF_ID = 0
 
     private val navController: NavController by lazy(LazyThreadSafetyMode.NONE) { NavHostFragment.findNavController(this) }
     private val model: MainViewModel by activityViewModels()
@@ -262,7 +274,6 @@ class MainFragment : Fragment(), OnRefreshListener {
         bn.constraint.isRefreshing = false
     }
 
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
@@ -277,9 +288,34 @@ class MainFragment : Fragment(), OnRefreshListener {
             R.id.hoursFragment2 ->{
                 navController.navigate(R.id.hoursFragment2)
             }
+            R.id.btn_notification ->{
+                createNotification()
+            }
         }
 
         return super.onOptionsItemSelected(item)
     }
+
+    private fun createNotification() {
+       // createNotifChannel()
+
+        val intent=Intent(requireContext(),MainActivity::class.java)
+        val pendingIntent = TaskStackBuilder.create(requireContext()).run {
+            addNextIntentWithParentStack(intent)
+            getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+
+        val notif = NotificationCompat.Builder(requireContext(),CHANNEL_ID)
+            .setContentTitle("Sample Title")
+            .setContentText("This is sample body notif")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(pendingIntent)
+            .build()
+
+
+        val notifManger = NotificationManagerCompat.from(requireContext())
+        notifManger.notify(1,notif)
+    }
+
 
 }

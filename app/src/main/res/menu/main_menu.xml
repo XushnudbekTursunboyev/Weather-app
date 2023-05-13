@@ -10,5 +10,8 @@
             android:id="@+id/hoursFragment2"
             android:icon="@drawable/ic_hours"
             android:title="Hours" />
+
+        <item android:id="@+id/btn_notification"
+            android:title="Notification"/>
     </group>
 </menu>
